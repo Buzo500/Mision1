@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1ecd9;
+    color: #302d25;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+main {
+    max-width: 780px;
+    margin: 30px auto;
+}
+
+header {
+    border-bottom: 3px solid #a16b21;
+    padding-bottom: 12px;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    font-size: 34px;
+    margin: 0;
+}
+
+h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.contenido {
+    display: flex;
+    gap: 30px;
+    margin: 28px 0;
+}
+
+.juego {
+    flex: 1;
+    min-width: 0;
+}
+
+.registro {
+    flex: 1;
+    min-width: 0;
+    border-left: 1px solid #b5aa8e;
+    padding-left: 25px;
+}
+
+#intentos {
+    font-weight: bold;
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 110px;
+    padding: 8px;
+    font-size: 20px;
+    background-color: #fffdf4;
+    color: #302d25;
+    border: 1px solid #81765d;
+}
+
+.botones {
+    margin-top: 12px;
+}
+
+button {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 7px 10px;
+    margin: 0 4px 6px 0;
+    background-color: #dfb45d;
+    color: #302d25;
+    border: 1px solid #81765d;
+    cursor: pointer;
+}
+
+#reiniciar {
+    background-color: transparent;
+    color: inherit;
+}
+
+button:hover {
+    text-decoration: underline;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#mensaje {
+    border-top: 1px dashed #b5aa8e;
+    padding-top: 15px;
+    font-weight: bold;
+}
+
+#mensaje.acierto {
+    color: #326230;
+}
+
+#mensaje.derrota {
+    color: #a0392b;
+}
+
+ol {
+    padding-left: 24px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+footer {
+    border-top: 1px solid #b5aa8e;
+    padding-top: 10px;
+}
+
+.nota, #entrada, #sin-intentos {
+    font-size: 14px;
+}
+
+body.oscuro {
+    background-color: #292720;
+    color: #f1ecd9;
+}
+
+.oscuro header {
+    border-color: #dfb45d;
+}
+
+.oscuro #mensaje.acierto {
+    color: #a8d69a;
+}
+
+.oscuro #mensaje.derrota {
+    color: #f2a593;
+}
+
+@media (max-width: 600px) {
+    main {
+        margin: 10px auto;
+    }
+
+    .contenido {
+        flex-direction: column;
+    }
+
+    .registro {
+        border-left: 0;
+        border-top: 1px solid #b5aa8e;
+        padding: 20px 0 0;
+    }
+}
