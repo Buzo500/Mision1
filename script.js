@@ -23,7 +23,7 @@ function comprobarNumero(evento) {
     let numeroUsuario = Number(numero.value);
 
     // validamos el input [1,100]
-    if (numero.value == "" || !Number.isInteger(numeroUsuario) || numeroUsuario < 1 || numeroUsuario > 100) {
+    if (numero.value === "" || !Number.isInteger(numeroUsuario) || numeroUsuario < 1 || numeroUsuario > 100) {
         mensaje.textContent = "Escribe un número entero entre 1 y 100.";
         return;
     }
@@ -34,7 +34,7 @@ function comprobarNumero(evento) {
     let pista = "";
 
     // se termina la partida por acierto del usuario
-    if (numeroUsuario == numeroSecreto) {
+    if (numeroUsuario === numeroSecreto) {
         pista = "¡Has acertado!";
         mensaje.textContent = `¡Has ganado! El número era ${numeroSecreto}. Has usado ${intentos} intento(s).`;
         mensaje.classList.add("acierto");
@@ -49,7 +49,7 @@ function comprobarNumero(evento) {
         mensaje.textContent = pista;
 
         // se termina la partida por falta de intentos
-        if (intentos == maxIntentos) {
+        if (intentos === maxIntentos) {
             mensaje.textContent = `Se acabaron los intentos. El número era ${numeroSecreto}.`;
             mensaje.classList.add("derrota");
             terminado = true;
@@ -95,7 +95,7 @@ formulario.addEventListener("submit", comprobarNumero);
 reiniciar.addEventListener("click", nuevaPartida);
 
 numero.addEventListener("input", function () {
-    if (numero.value == "") {
+    if (numero.value === "") {
         entrada.textContent = "Todavía no has escrito un número.";
     } else {
         entrada.textContent = `Vas a probar con el número ${numero.value}.`;
@@ -104,7 +104,7 @@ numero.addEventListener("input", function () {
 
 // La tecla D cambia el modo, siempre que no estemos escribiendo en el campo.
 document.addEventListener("keydown", function (evento) {
-    if (evento.key.toLowerCase() == "d" && evento.target != numero && !evento.repeat) {
+    if (evento.key.toLowerCase() === "d" && evento.target != numero && !evento.repeat) {
         document.body.classList.toggle("oscuro");
     }
 });
