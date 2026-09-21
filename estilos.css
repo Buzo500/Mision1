@@ -22,6 +22,36 @@ body {
     background:
         radial-gradient(circle at 20% 0%, rgba(124, 73, 159, 0.32), transparent 35%),
         var(--fondo);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.luz-arcana {
+    --fondo: #e8d9b8;
+    --panel: #fff9e7;
+    --texto: #33263c;
+    --texto-oscuro: #33263c;
+    --morado: #6c3991;
+    --dorado: #c88418;
+    --borde: rgba(81, 49, 100, 0.25);
+}
+
+.decoracion {
+    position: fixed;
+    z-index: -1;
+    width: 260px;
+    height: 260px;
+    border: 1px solid rgba(214, 182, 255, 0.12);
+    transform: rotate(45deg);
+}
+
+.decoracion-izquierda {
+    top: -150px;
+    left: -120px;
+}
+
+.decoracion-derecha {
+    right: -150px;
+    bottom: -100px;
 }
 
 button {
@@ -261,7 +291,7 @@ h1 span {
     display: grid;
     width: 150px;
     height: 105px;
-    margin: 35px auto 24px;
+    margin: 0;
     place-items: center;
     border: 5px solid #120d17;
     border-top-color: #806594;
@@ -269,6 +299,64 @@ h1 span {
     color: #d6b6ff;
     background: linear-gradient(#34213e, #130d17);
     font-size: 2.1rem;
+}
+
+.caldero-visual {
+    position: relative;
+    display: grid;
+    height: 150px;
+    margin: 2px auto 8px;
+    place-items: end center;
+}
+
+.burbuja {
+    position: absolute;
+    border: 2px solid #d6b6ff;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.partida-activa .burbuja {
+    animation: burbujear 2.2s infinite ease-in;
+}
+
+.burbuja-uno {
+    bottom: 92px;
+    left: 42%;
+    width: 14px;
+    height: 14px;
+}
+
+.burbuja-dos {
+    bottom: 75px;
+    left: 57%;
+    width: 9px;
+    height: 9px;
+    animation-delay: 0.7s !important;
+}
+
+.burbuja-tres {
+    bottom: 84px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    animation-delay: 1.35s !important;
+}
+
+@keyframes burbujear {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.7);
+    }
+
+    30% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-55px) scale(1.2);
+    }
 }
 
 .contenido-caldero {
@@ -315,6 +403,7 @@ h1 span {
 
 .boton:hover:not(:disabled) {
     filter: brightness(1.08);
+    transform: translateY(-2px);
 }
 
 .boton:focus-visible,
@@ -359,10 +448,20 @@ h1 span {
 }
 
 footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
     padding-top: 18px;
-    text-align: center;
     font-size: 0.75rem;
     opacity: 0.6;
+}
+
+footer p {
+    margin: 0;
+}
+
+.pista-secreta {
+    text-align: right;
 }
 
 .historial-panel {
@@ -448,5 +547,24 @@ footer {
 
     .historial {
         grid-template-columns: 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pista-secreta {
+        text-align: left;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

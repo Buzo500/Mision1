@@ -68,6 +68,7 @@ const botonVaciar = document.querySelector("#vaciar");
 const botonIniciar = document.querySelector("#iniciar");
 const mensaje = document.querySelector("#mensaje");
 const historialElemento = document.querySelector("#historial");
+const calderoPanel = document.querySelector(".caldero-panel");
 
 let ingredientesSeleccionados = [];
 let pedidoActual = null;
@@ -279,6 +280,7 @@ function terminarPartida(motivo) {
     clearInterval(temporizador);
     temporizador = null;
     activarControles(false);
+    calderoPanel.classList.remove("partida-activa");
     mostrarMensaje(`${motivo} Puntuación final: ${puntuacion}.`, "error");
     botonIniciar.textContent = "Abrir de nuevo";
     botonIniciar.focus();
@@ -310,6 +312,7 @@ function iniciarBotica() {
     historialElemento.appendChild(mensajeVacio);
 
     activarControles(true);
+    calderoPanel.classList.add("partida-activa");
     actualizarMarcadores();
     mostrarMensaje("La botica está abierta. Prepara el primer pedido.");
     elegirPedido();
@@ -327,6 +330,12 @@ ingredientesElemento.addEventListener("click", (evento) => {
 botonVaciar.addEventListener("click", vaciarCaldero);
 botonServir.addEventListener("click", servirPocion);
 botonIniciar.addEventListener("click", iniciarBotica);
+
+document.addEventListener("keydown", (evento) => {
+    if (evento.key.toLowerCase() === "l" && !evento.repeat) {
+        document.body.classList.toggle("luz-arcana");
+    }
+});
 
 crearBotonesIngredientes();
 actualizarCaldero();

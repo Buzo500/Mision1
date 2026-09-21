@@ -2,18 +2,30 @@
 
 Misión M1 · El Despertar del DOM — Web Development I.
 
-## Estado del proyecto
+## Cómo probarlo
 
-Fase 4 completada: la partida tiene temporizador, tres licencias, historial de entregas y condiciones de finalización.
+Abre `index.html` directamente en el navegador o utiliza Live Server.
 
-Cada receta correcta suma 10 puntos y cada mezcla incorrecta consume una licencia. La partida termina cuando se agota el tiempo o se pierden las tres licencias.
+1. Pulsa **Abrir botica**.
+2. Busca en la estantería los tres ingredientes indicados en la receta.
+3. Selecciónalos y pulsa **Servir poción**.
+4. Consigue tantos puntos como puedas antes de que terminen los 45 segundos.
+
+Cada receta correcta suma 10 puntos. Una mezcla incorrecta consume una de las tres licencias. La tecla secreta `L` cambia la iluminación del laboratorio.
 
 ## Uso de IA
 
-Utilicé ChatGPT para explorar ideas para la Misión 1 y elegí un juego de alquimia contrarreloj. Un prompt real utilizado fue: **«Quiero que me des ideas para hacer la misión 1»**.
+Utilicé ChatGPT como apoyo para explorar ideas y construir el proyecto por fases. Dos prompts reales relevantes fueron:
 
-Esta sección se completará al final con el resto de prompts, las comprobaciones realizadas y las partes modificadas a mano.
+- «Quiero que me des ideas para hacer la misión 1».
+- «Dámelo por fases, primero haz la primera fase, hago el commit y así para las siguientes fases».
+
+El trabajo se dividió en cinco fases: interfaz, selección de ingredientes, pedidos, reglas de la partida y acabado final. Antes de cada commit se comprobaron en el navegador las interacciones añadidas, incluyendo mezclas correctas e incorrectas, pérdida de licencias, reinicio y tecla secreta. También se comprobó la sintaxis de JavaScript y que la consola no mostrase errores.
+
+Revisé los cambios fase a fase antes de confirmarlos en Git y mantuve separados el HTML, el CSS y el JavaScript.
 
 ## Autopsia
 
-Esta sección se completará al terminar el proyecto, cuando pueda explicar dos decisiones reales y las alternativas descartadas.
+1. Guardo los ingredientes seleccionados en el array `ingredientesSeleccionados` y después actualizo el DOM desde ese estado. La alternativa era consultar las clases CSS de los botones cada vez que se sirve una poción. La descarté porque mezclaría la lógica del juego con su representación visual y haría más difícil vaciar o reiniciar el caldero.
+
+2. Utilizo un único `addEventListener` en el contenedor de ingredientes y averiguo qué botón se pulsó con `closest`. La alternativa era añadir un listener diferente a cada botón. Elegí la delegación porque los botones se crean dinámicamente y así toda la estantería se controla desde un único lugar.

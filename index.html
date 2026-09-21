@@ -9,6 +9,9 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <div class="decoracion decoracion-izquierda" aria-hidden="true"></div>
+    <div class="decoracion decoracion-derecha" aria-hidden="true"></div>
+
     <main class="contenedor-principal">
         <header class="cabecera">
             <p class="sobretitulo">Academia Arcana · Laboratorio 7</p>
@@ -60,7 +63,12 @@
                     <span id="contador-ingredientes">0 ingredientes</span>
                 </div>
 
-                <div class="caldero" aria-hidden="true">♨</div>
+                <div class="caldero-visual" aria-hidden="true">
+                    <div class="burbuja burbuja-uno"></div>
+                    <div class="burbuja burbuja-dos"></div>
+                    <div class="burbuja burbuja-tres"></div>
+                    <div class="caldero">♨</div>
+                </div>
 
                 <ul id="contenido-caldero" class="contenido-caldero" aria-live="polite"></ul>
 
@@ -89,7 +97,8 @@
         </section>
 
         <footer>
-            <p>Fase 4 · Temporizador, licencias, historial y final de partida.</p>
+            <p>Consejo: selecciona exactamente los ingredientes indicados en la receta.</p>
+            <p class="pista-secreta">Una vieja runa dice que la tecla «L» cambia la luz del laboratorio.</p>
         </footer>
     </main>
 </body>
