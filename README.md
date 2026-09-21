@@ -1,6 +1,6 @@
 # Alquimista Express
 
-Misión M1 · El Despertar del DOM — Web Development I.
+Misión M1 · El Despertar del DOM
 
 ## Cómo probarlo
 
@@ -15,12 +15,12 @@ Cada receta correcta suma 10 puntos. Una mezcla incorrecta consume una de las tr
 
 ## Uso de IA
 
-Utilicé ChatGPT como apoyo para explorar ideas y construir el proyecto por fases. Dos prompts reales relevantes fueron:
+Utilicé ChatGPT como apoyo para explorar ideas y saber como poner imágenes. Dos prompts reales relevantes fueron:
 
 - «Quiero que me des ideas para hacer la misión 1».
-- «Dámelo por fases, primero haz la primera fase, hago el commit y así para las siguientes fases».
+- «Como puedo hacer para inlcuir imágenes en el programa, se me ha ocurrido meter emojis».
 
-El trabajo se dividió en cinco fases: interfaz, selección de ingredientes, pedidos, reglas de la partida y acabado final. Antes de cada commit se comprobaron en el navegador las interacciones añadidas, incluyendo mezclas correctas e incorrectas, pérdida de licencias, reinicio y tecla secreta. También se comprobó la sintaxis de JavaScript y que la consola no mostrase errores.
+Medio varias ideas pero prefería quedarme con esta ya que es bastante original y diverge bastante de la tarea de adivinar el numero. Para lo de las imágenes me recomendó usar emojis UNICODE, y así hice.
 
 Revisé los cambios fase a fase antes de confirmarlos en Git y mantuve separados el HTML, el CSS y el JavaScript.
 
