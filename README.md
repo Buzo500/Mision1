@@ -1,35 +1,19 @@
-# Uso de la IA
+# Alquimista Express
 
-Utilicé ChatGPT para obtener ideas iniciales para el minijuego.
+Misión M1 · El Despertar del DOM — Web Development I.
 
-Uno de los prompts que utilicé fue:
-"Dame ideas para un minijuego en el navegador sencillo"
+## Estado del proyecto
 
-Me propuso varias ideas, como un tablón de pequeñas metas que se van
-tachando durante el día o una ruleta de planes aleatorios. Finalmente
-decidí hacer por mi cuenta un juego de adivinar un número.
+Fase 1 completada: estructura HTML, diseño inicial y conexión del archivo JavaScript.
 
-También utilicé ChatGPT para consultar cómo generar un número entero
-aleatorio en JavaScript.
+La interacción con los ingredientes y las reglas de la partida se añadirán en las siguientes fases.
 
-Prompt:
-"Como generar en javascript numeros enteros aleatorios del 1 al 100"
+## Uso de IA
 
-A partir de esto utilice:
-let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+Utilicé ChatGPT para explorar ideas para la Misión 1 y elegí un juego de alquimia contrarreloj. Un prompt real utilizado fue: **«Quiero que me des ideas para hacer la misión 1»**.
 
-Comprobé que funcionaba jugando varias partidas y verificando que se
-generaban números dentro del intervalo del 1 al 100. El resto de la
-lógica del juego, el HTML y los estilos CSS los escribí y adapté a mano.
+Esta sección se completará al final con el resto de prompts, las comprobaciones realizadas y las partes modificadas a mano.
 
-# Autopsia
+## Autopsia
 
-Una decisión discutible fue limitar la partida a 7 intentos. Otra opción
-era permitir intentos ilimitados, pero la descarté porque quería que hubiese
-una condición de derrota y que las partidas fuesen cortas.
-
-Otra decisión discutible fue guardar los intentos directamente como elementos
-`li` en el DOM. Una alternativa habría sido guardar primero los intentos en
-un array de JavaScript y generar el historial a partir de él. Lo descarté
-porque para un juego tan pequeño no necesitaba mantener ese estado por
-separado y añadir cada intento directamente al DOM era más sencillo.
+Esta sección se completará al terminar el proyecto, cuando pueda explicar dos decisiones reales y las alternativas descartadas.

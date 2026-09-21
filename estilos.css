@@ -1,159 +1,337 @@
+:root {
+    --fondo: #160f20;
+    --panel: #2b1b37;
+    --pergamino: #f3dfb2;
+    --texto: #f8efd9;
+    --texto-oscuro: #35263d;
+    --morado: #9b6ad6;
+    --dorado: #f2bd57;
+    --borde: rgba(242, 189, 87, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f1ecd9;
-    color: #302d25;
+    min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    line-height: 1.5;
-}
-
-main {
-    max-width: 780px;
-    margin: 30px auto;
-}
-
-header {
-    border-bottom: 3px solid #a16b21;
-    padding-bottom: 12px;
-}
-
-h1 {
-    font-family: Georgia, serif;
-    font-size: 34px;
-    margin: 0;
-}
-
-h2 {
-    font-size: 20px;
-    margin-top: 0;
-}
-
-.contenido {
-    display: flex;
-    gap: 30px;
-    margin: 28px 0;
-}
-
-.juego {
-    flex: 1;
-    min-width: 0;
-}
-
-.registro {
-    flex: 1;
-    min-width: 0;
-    border-left: 1px solid #b5aa8e;
-    padding-left: 25px;
-}
-
-#intentos {
-    font-weight: bold;
-    margin-top: 0;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-}
-
-input {
-    width: 110px;
-    padding: 8px;
-    font-size: 20px;
-    background-color: #fffdf4;
-    color: #302d25;
-    border: 1px solid #81765d;
-}
-
-.botones {
-    margin-top: 12px;
+    padding: 32px 20px;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    color: var(--texto);
+    background:
+        radial-gradient(circle at 20% 0%, rgba(124, 73, 159, 0.32), transparent 35%),
+        var(--fondo);
 }
 
 button {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    padding: 7px 10px;
-    margin: 0 4px 6px 0;
-    background-color: #dfb45d;
-    color: #302d25;
-    border: 1px solid #81765d;
-    cursor: pointer;
+    font: inherit;
 }
 
-#reiniciar {
-    background-color: transparent;
-    color: inherit;
+.contenedor-principal {
+    width: min(1080px, 100%);
+    margin: 0 auto;
 }
 
-button:hover {
-    text-decoration: underline;
+.cabecera {
+    margin-bottom: 26px;
+    text-align: center;
 }
 
-button:disabled {
-    opacity: 0.5;
-    cursor: default;
+.sobretitulo,
+.titulo-seccion,
+.etiqueta {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
 }
 
-#mensaje {
-    border-top: 1px dashed #b5aa8e;
-    padding-top: 15px;
+.sobretitulo {
+    margin: 0 0 8px;
+    color: var(--dorado);
+    font-size: 0.78rem;
     font-weight: bold;
 }
 
-#mensaje.acierto {
-    color: #326230;
+h1 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 1;
 }
 
-#mensaje.derrota {
-    color: #a0392b;
+h1 span {
+    color: var(--dorado);
+    font-style: italic;
 }
 
-ol {
-    padding-left: 24px;
+.introduccion {
+    max-width: 620px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+    opacity: 0.78;
 }
 
-li {
-    margin-bottom: 8px;
+.panel-marcadores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 18px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+    background-color: var(--panel);
+}
+
+.marcador {
+    padding: 18px 24px;
+    text-align: center;
+}
+
+.marcador + .marcador {
+    border-left: 1px solid var(--borde);
+}
+
+.marcador strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--dorado);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.65rem;
+}
+
+.etiqueta {
+    font-size: 0.68rem;
+    font-weight: bold;
+    opacity: 0.72;
+}
+
+.zona-juego {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.8fr);
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: 22px;
+    background-color: var(--panel);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+}
+
+.mesa,
+.caldero-panel {
+    padding: clamp(22px, 4vw, 38px);
+}
+
+.caldero-panel {
+    border-left: 1px solid var(--borde);
+    background-color: rgba(0, 0, 0, 0.09);
+}
+
+.titulo-seccion {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    color: var(--dorado);
+    font-size: 0.68rem;
+    font-weight: bold;
+}
+
+.titulo-seccion p {
+    margin: 0;
+}
+
+.titulo-seccion span {
+    color: var(--texto);
+    opacity: 0.55;
+}
+
+.pergamino {
+    position: relative;
+    min-height: 214px;
+    padding: 28px 28px 24px 118px;
+    border-radius: 14px;
+    color: var(--texto-oscuro);
+    background-color: var(--pergamino);
+}
+
+.icono-pocion {
+    position: absolute;
+    top: 32px;
+    left: 28px;
+    font-size: 3.8rem;
+}
+
+.pergamino h2 {
+    margin: 0 0 8px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.pergamino > p {
+    margin: 0 0 18px;
+    line-height: 1.5;
+    opacity: 0.76;
+}
+
+.receta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.receta li {
+    padding: 6px 10px;
+    border: 1px solid rgba(64, 40, 73, 0.18);
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.35);
+    font-size: 0.78rem;
+}
+
+.subtitulo {
+    margin: 28px 0 14px;
+    font-size: 0.9rem;
+}
+
+.ingredientes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.ingrediente {
+    min-height: 94px;
+    padding: 12px 8px;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    color: var(--texto);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.ingrediente span,
+.ingrediente strong {
+    display: block;
+}
+
+.ingrediente span {
+    margin-bottom: 7px;
+    font-size: 1.75rem;
+}
+
+.ingrediente strong {
+    font-size: 0.72rem;
+}
+
+.caldero {
+    display: grid;
+    width: 150px;
+    height: 105px;
+    margin: 35px auto 24px;
+    place-items: center;
+    border: 5px solid #120d17;
+    border-top-color: #806594;
+    border-radius: 12px 12px 70px 70px;
+    color: #d6b6ff;
+    background: linear-gradient(#34213e, #130d17);
+    font-size: 2.1rem;
+}
+
+.contenido-caldero {
+    min-height: 88px;
+    margin: 0 0 20px;
+    padding: 32px 14px 14px;
+    border: 1px dashed var(--borde);
+    border-radius: 12px;
+    list-style: none;
+    text-align: center;
+    font-size: 0.82rem;
+    opacity: 0.55;
+}
+
+.acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.boton {
+    min-height: 45px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+.boton:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+}
+
+.boton-principal,
+.boton-iniciar {
+    color: #281c15;
+    background-color: var(--dorado);
+}
+
+.boton-secundario {
+    border-color: var(--borde);
+    color: var(--texto);
+    background-color: transparent;
+}
+
+.boton-iniciar {
+    width: 100%;
+}
+
+.mensaje {
+    min-height: 47px;
+    margin: 16px 0 12px;
+    padding: 12px;
+    border-left: 3px solid var(--morado);
+    background-color: rgba(155, 106, 214, 0.09);
+    font-size: 0.82rem;
 }
 
 footer {
-    border-top: 1px solid #b5aa8e;
-    padding-top: 10px;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 0.75rem;
+    opacity: 0.6;
 }
 
-.nota, #entrada, #sin-intentos {
-    font-size: 14px;
-}
-
-body.oscuro {
-    background-color: #292720;
-    color: #f1ecd9;
-}
-
-.oscuro header {
-    border-color: #dfb45d;
-}
-
-.oscuro #mensaje.acierto {
-    color: #a8d69a;
-}
-
-.oscuro #mensaje.derrota {
-    color: #f2a593;
-}
-
-@media (max-width: 600px) {
-    main {
-        margin: 10px auto;
+@media (max-width: 800px) {
+    .zona-juego {
+        grid-template-columns: 1fr;
     }
 
-    .contenido {
-        flex-direction: column;
-    }
-
-    .registro {
+    .caldero-panel {
+        border-top: 1px solid var(--borde);
         border-left: 0;
-        border-top: 1px solid #b5aa8e;
-        padding: 20px 0 0;
+    }
+}
+
+@media (max-width: 540px) {
+    body {
+        padding: 18px 12px;
+    }
+
+    .marcador {
+        padding: 14px 6px;
+    }
+
+    .marcador strong {
+        font-size: 1.2rem;
+    }
+
+    .pergamino {
+        padding: 96px 20px 22px;
+    }
+
+    .icono-pocion {
+        top: 22px;
+        left: 20px;
+    }
+
+    .ingredientes {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

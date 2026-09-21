@@ -3,42 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adivina el número</title>
+    <meta name="description" content="Alquimista Express, un minijuego de pociones contrarreloj.">
+    <title>Alquimista Express</title>
     <link rel="stylesheet" href="estilos.css">
     <script src="script.js" defer></script>
 </head>
 <body>
-    <main>
-        <header>
-            <h1>Adivina el número</h1>
-            <p>He pensado un número del 1 al 100. Tienes 7 intentos para adivinarlo.</p>
+    <main class="contenedor-principal">
+        <header class="cabecera">
+            <p class="sobretitulo">Academia Arcana · Laboratorio 7</p>
+            <h1>Alquimista <span>Express</span></h1>
+            <p class="introduccion">
+                Prepara cada pedido antes de que cierre la botica. Tres errores y perderás tu licencia.
+            </p>
         </header>
 
-        <div class="contenido">
-            <section class="juego" aria-label="Partida">
-                <p id="intentos">Intentos: 0 de 7</p>
-                <form id="formulario">
-                    <label for="numero">Escribe tu número:</label>
-                    <input type="number" id="numero" min="1" max="100" step="1" required>
-                    <div class="botones">
-                        <button type="submit" id="comprobar">Comprobar</button>
-                        <button type="button" id="reiniciar">Nueva partida</button>
-                    </div>
-                </form>
-                <p id="entrada">Todavía no has escrito un número.</p>
-                <p id="mensaje" aria-live="polite">¡Vamos a jugar!</p>
+        <section class="panel-marcadores" aria-label="Estado de la partida">
+            <div class="marcador">
+                <span class="etiqueta">Puntuación</span>
+                <strong>0</strong>
+            </div>
+            <div class="marcador">
+                <span class="etiqueta">Tiempo</span>
+                <strong>-- s</strong>
+            </div>
+            <div class="marcador">
+                <span class="etiqueta">Licencias</span>
+                <strong>♥ ♥ ♥</strong>
+            </div>
+        </section>
+
+        <div class="zona-juego">
+            <section class="mesa" aria-labelledby="titulo-pedido">
+                <div class="titulo-seccion">
+                    <p>Pedido actual</p>
+                    <span>#---</span>
+                </div>
+
+                <div class="pergamino">
+                    <div class="icono-pocion" aria-hidden="true">⚗️</div>
+                    <h2 id="titulo-pedido">La botica está cerrada</h2>
+                    <p>En las próximas fases aparecerá aquí la receta solicitada.</p>
+                    <ul class="receta" aria-label="Ingredientes solicitados">
+                        <li>Ingrediente 1</li>
+                        <li>Ingrediente 2</li>
+                        <li>Ingrediente 3</li>
+                    </ul>
+                </div>
+
+                <h2 class="subtitulo">Estantería de ingredientes</h2>
+                <div class="ingredientes" aria-label="Ingredientes disponibles">
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">🌙</span>
+                        <strong>Polvo lunar</strong>
+                    </button>
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">🍄</span>
+                        <strong>Hongo azul</strong>
+                    </button>
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">💧</span>
+                        <strong>Lágrima feérica</strong>
+                    </button>
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">🌿</span>
+                        <strong>Hoja élfica</strong>
+                    </button>
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">🔥</span>
+                        <strong>Brasa de dragón</strong>
+                    </button>
+                    <button class="ingrediente" type="button" disabled>
+                        <span aria-hidden="true">💎</span>
+                        <strong>Cristal solar</strong>
+                    </button>
+                </div>
             </section>
 
-            <section class="registro" aria-labelledby="titulo-historial">
-                <h2 id="titulo-historial">Tus intentos</h2>
-                <p id="sin-intentos">Aquí aparecerán los números que pruebes.</p>
-                <ol id="historial"></ol>
-            </section>
+            <aside class="caldero-panel" aria-labelledby="titulo-caldero">
+                <div class="titulo-seccion">
+                    <p id="titulo-caldero">Tu caldero</p>
+                    <span>0 ingredientes</span>
+                </div>
+
+                <div class="caldero" aria-hidden="true">♨</div>
+
+                <ul class="contenido-caldero">
+                    <li>El caldero está vacío</li>
+                </ul>
+
+                <div class="acciones">
+                    <button class="boton boton-principal" type="button" disabled>Servir poción</button>
+                    <button class="boton boton-secundario" type="button" disabled>Vaciar caldero</button>
+                </div>
+
+                <p id="mensaje" class="mensaje" aria-live="polite">Cargando el laboratorio...</p>
+                <button class="boton boton-iniciar" type="button" disabled>Abrir botica</button>
+            </aside>
         </div>
 
         <footer>
-            <p class="nota">También puedes comprobar el número pulsando Enter.</p>
-            <p class="nota">Hay una tecla secreta para cambiar el aspecto... empieza por «d».</p>
+            <p>Fase 1 · Estructura e interfaz de la botica.</p>
         </footer>
     </main>
 </body>
