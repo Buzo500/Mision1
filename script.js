@@ -48,7 +48,13 @@ const pociones = [
     }
 ];
 
+const DURACION_PARTIDA = 45;
+const VIDAS_INICIALES = 3;
+
 const puntuacionElemento = document.querySelector("#puntuacion");
+const tiempoElemento = document.querySelector("#tiempo");
+const progresoTiempo = document.querySelector("#progreso-tiempo");
+const vidasElemento = document.querySelector("#vidas");
 const numeroPedido = document.querySelector("#numero-pedido");
 const iconoPocion = document.querySelector("#icono-pocion");
 const tituloPedido = document.querySelector("#titulo-pedido");
@@ -61,12 +67,16 @@ const botonServir = document.querySelector("#servir");
 const botonVaciar = document.querySelector("#vaciar");
 const botonIniciar = document.querySelector("#iniciar");
 const mensaje = document.querySelector("#mensaje");
+const historialElemento = document.querySelector("#historial");
 
 let ingredientesSeleccionados = [];
 let pedidoActual = null;
 let puntuacion = 0;
+let vidas = VIDAS_INICIALES;
+let tiempoRestante = DURACION_PARTIDA;
 let cantidadPedidos = 0;
 let boticaAbierta = false;
+let temporizador = null;
 
 function buscarIngrediente(id) {
     return ingredientesDisponibles.find((ingrediente) => ingrediente.id === id);
@@ -133,6 +143,19 @@ function mostrarMensaje(texto, tipo = "") {
     }
 }
 
+function actualizarMarcadores() {
+    puntuacionElemento.textContent = puntuacion;
+    tiempoElemento.textContent = tiempoRestante;
+    vidasElemento.textContent = Array.from({ length: VIDAS_INICIALES }, (_, indice) => {
+        return indice < vidas ? "♥" : "♡";
+    }).join(" ");
+    vidasElemento.setAttribute("aria-label", `${vidas} licencias disponibles`);
+
+    const porcentaje = (tiempoRestante / DURACION_PARTIDA) * 100;
+    progresoTiempo.style.width = `${porcentaje}%`;
+    progresoTiempo.style.backgroundColor = tiempoRestante <= 10 ? "#f07d78" : "var(--dorado)";
+}
+
 function elegirPedido() {
     let siguientePedido = pociones[Math.floor(Math.random() * pociones.length)];
 
@@ -196,35 +219,101 @@ function contieneIngredientesCorrectos() {
     return pedidoActual.ingredientes.every((id) => ingredientesSeleccionados.includes(id));
 }
 
+function registrarEntrega(esCorrecta) {
+    const mensajeVacio = historialElemento.querySelector(".historial-vacio");
+
+    if (mensajeVacio) {
+        mensajeVacio.remove();
+    }
+
+    const entrada = document.createElement("li");
+    entrada.className = esCorrecta ? "correcto" : "incorrecto";
+    entrada.textContent = esCorrecta
+        ? `✓ ${pedidoActual.nombre} entregada correctamente`
+        : `✕ ${pedidoActual.nombre} salió mal`;
+    historialElemento.prepend(entrada);
+
+    while (historialElemento.children.length > 6) {
+        historialElemento.lastElementChild.remove();
+    }
+}
+
 function servirPocion() {
     if (!boticaAbierta || ingredientesSeleccionados.length === 0) {
         return;
     }
 
-    if (contieneIngredientesCorrectos()) {
+    const esCorrecta = contieneIngredientesCorrectos();
+    registrarEntrega(esCorrecta);
+
+    if (esCorrecta) {
         puntuacion += 10;
-        puntuacionElemento.textContent = puntuacion;
         mostrarMensaje("¡Mezcla perfecta! Has ganado 10 puntos.", "exito");
-        elegirPedido();
     } else {
-        mostrarMensaje("La mezcla no coincide con la receta. Revisa los ingredientes.", "error");
+        vidas -= 1;
+        mostrarMensaje("La mezcla no coincide con la receta. Pierdes una licencia.", "error");
+    }
+
+    actualizarMarcadores();
+
+    if (vidas === 0) {
+        terminarPartida("Te has quedado sin licencias de alquimista.");
+    } else {
+        elegirPedido();
+    }
+}
+
+function activarControles(activar) {
+    document.querySelectorAll(".ingrediente").forEach((boton) => {
+        boton.disabled = !activar;
+    });
+
+    if (!activar) {
+        botonServir.disabled = true;
+        botonVaciar.disabled = true;
+    }
+}
+
+function terminarPartida(motivo) {
+    boticaAbierta = false;
+    clearInterval(temporizador);
+    temporizador = null;
+    activarControles(false);
+    mostrarMensaje(`${motivo} Puntuación final: ${puntuacion}.`, "error");
+    botonIniciar.textContent = "Abrir de nuevo";
+    botonIniciar.focus();
+}
+
+function avanzarTiempo() {
+    tiempoRestante -= 1;
+    actualizarMarcadores();
+
+    if (tiempoRestante === 0) {
+        terminarPartida("La botica ha cerrado.");
     }
 }
 
 function iniciarBotica() {
+    clearInterval(temporizador);
     boticaAbierta = true;
     puntuacion = 0;
+    vidas = VIDAS_INICIALES;
+    tiempoRestante = DURACION_PARTIDA;
     cantidadPedidos = 0;
     pedidoActual = null;
-    puntuacionElemento.textContent = puntuacion;
-    botonIniciar.textContent = "Reiniciar pedidos";
+    botonIniciar.textContent = "Reiniciar partida";
 
-    document.querySelectorAll(".ingrediente").forEach((boton) => {
-        boton.disabled = false;
-    });
+    historialElemento.textContent = "";
+    const mensajeVacio = document.createElement("li");
+    mensajeVacio.className = "historial-vacio";
+    mensajeVacio.textContent = "Todavía no has entregado ninguna poción.";
+    historialElemento.appendChild(mensajeVacio);
 
+    activarControles(true);
+    actualizarMarcadores();
     mostrarMensaje("La botica está abierta. Prepara el primer pedido.");
     elegirPedido();
+    temporizador = setInterval(avanzarTiempo, 1000);
 }
 
 ingredientesElemento.addEventListener("click", (evento) => {
@@ -241,3 +330,4 @@ botonIniciar.addEventListener("click", iniciarBotica);
 
 crearBotonesIngredientes();
 actualizarCaldero();
+actualizarMarcadores();

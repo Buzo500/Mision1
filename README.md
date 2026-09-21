@@ -4,9 +4,9 @@ Misión M1 · El Despertar del DOM — Web Development I.
 
 ## Estado del proyecto
 
-Fase 3 completada: se generan pedidos aleatorios, se muestran sus recetas y se comprueba el contenido del caldero.
+Fase 4 completada: la partida tiene temporizador, tres licencias, historial de entregas y condiciones de finalización.
 
-Cada receta correcta suma 10 puntos. El temporizador, las vidas y el historial se añadirán en la siguiente fase.
+Cada receta correcta suma 10 puntos y cada mezcla incorrecta consume una licencia. La partida termina cuando se agota el tiempo o se pierden las tres licencias.
 
 ## Uso de IA
 
