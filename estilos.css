@@ -206,6 +206,20 @@ h1 span {
     border-radius: 12px;
     color: var(--texto);
     background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+
+.ingrediente:hover,
+.ingrediente:focus-visible {
+    border-color: var(--dorado);
+    transform: translateY(-3px);
+}
+
+.ingrediente.seleccionado {
+    border-color: #78d6a0;
+    background-color: rgba(120, 214, 160, 0.16);
+    box-shadow: inset 0 0 0 1px #78d6a0;
 }
 
 .ingrediente span,
@@ -239,12 +253,20 @@ h1 span {
 .contenido-caldero {
     min-height: 88px;
     margin: 0 0 20px;
-    padding: 32px 14px 14px;
+    padding: 14px;
     border: 1px dashed var(--borde);
     border-radius: 12px;
     list-style: none;
-    text-align: center;
     font-size: 0.82rem;
+}
+
+.contenido-caldero li {
+    padding: 5px 4px;
+}
+
+.contenido-caldero .vacio {
+    padding-top: 20px;
+    text-align: center;
     opacity: 0.55;
 }
 
@@ -264,6 +286,20 @@ h1 span {
 .boton:disabled {
     cursor: not-allowed;
     opacity: 0.42;
+}
+
+.boton:not(:disabled) {
+    cursor: pointer;
+}
+
+.boton:hover:not(:disabled) {
+    filter: brightness(1.08);
+}
+
+.boton:focus-visible,
+.ingrediente:focus-visible {
+    outline: 3px solid #d6b6ff;
+    outline-offset: 3px;
 }
 
 .boton-principal,

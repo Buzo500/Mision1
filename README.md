@@ -4,9 +4,9 @@ Misión M1 · El Despertar del DOM — Web Development I.
 
 ## Estado del proyecto
 
-Fase 1 completada: estructura HTML, diseño inicial y conexión del archivo JavaScript.
+Fase 2 completada: los ingredientes se generan desde JavaScript y se pueden añadir o retirar del caldero.
 
-La interacción con los ingredientes y las reglas de la partida se añadirán en las siguientes fases.
+Los pedidos y la comprobación de recetas se añadirán en la siguiente fase.
 
 ## Uso de IA
 

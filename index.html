@@ -52,58 +52,33 @@
                 </div>
 
                 <h2 class="subtitulo">Estantería de ingredientes</h2>
-                <div class="ingredientes" aria-label="Ingredientes disponibles">
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">🌙</span>
-                        <strong>Polvo lunar</strong>
-                    </button>
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">🍄</span>
-                        <strong>Hongo azul</strong>
-                    </button>
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">💧</span>
-                        <strong>Lágrima feérica</strong>
-                    </button>
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">🌿</span>
-                        <strong>Hoja élfica</strong>
-                    </button>
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">🔥</span>
-                        <strong>Brasa de dragón</strong>
-                    </button>
-                    <button class="ingrediente" type="button" disabled>
-                        <span aria-hidden="true">💎</span>
-                        <strong>Cristal solar</strong>
-                    </button>
-                </div>
+                <div id="ingredientes" class="ingredientes" aria-label="Ingredientes disponibles"></div>
             </section>
 
             <aside class="caldero-panel" aria-labelledby="titulo-caldero">
                 <div class="titulo-seccion">
                     <p id="titulo-caldero">Tu caldero</p>
-                    <span>0 ingredientes</span>
+                    <span id="contador-ingredientes">0 ingredientes</span>
                 </div>
 
                 <div class="caldero" aria-hidden="true">♨</div>
 
-                <ul class="contenido-caldero">
-                    <li>El caldero está vacío</li>
-                </ul>
+                <ul id="contenido-caldero" class="contenido-caldero" aria-live="polite"></ul>
 
                 <div class="acciones">
                     <button class="boton boton-principal" type="button" disabled>Servir poción</button>
-                    <button class="boton boton-secundario" type="button" disabled>Vaciar caldero</button>
+                    <button id="vaciar" class="boton boton-secundario" type="button" disabled>
+                        Vaciar caldero
+                    </button>
                 </div>
 
-                <p id="mensaje" class="mensaje" aria-live="polite">Cargando el laboratorio...</p>
+                <p id="mensaje" class="mensaje" aria-live="polite">Selecciona ingredientes para probar el caldero.</p>
                 <button class="boton boton-iniciar" type="button" disabled>Abrir botica</button>
             </aside>
         </div>
 
         <footer>
-            <p>Fase 1 · Estructura e interfaz de la botica.</p>
+            <p>Fase 2 · Selección de ingredientes y contenido del caldero.</p>
         </footer>
     </main>
 </body>
