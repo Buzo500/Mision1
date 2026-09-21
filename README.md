@@ -4,9 +4,9 @@ Misión M1 · El Despertar del DOM — Web Development I.
 
 ## Estado del proyecto
 
-Fase 2 completada: los ingredientes se generan desde JavaScript y se pueden añadir o retirar del caldero.
+Fase 3 completada: se generan pedidos aleatorios, se muestran sus recetas y se comprueba el contenido del caldero.
 
-Los pedidos y la comprobación de recetas se añadirán en la siguiente fase.
+Cada receta correcta suma 10 puntos. El temporizador, las vidas y el historial se añadirán en la siguiente fase.
 
 ## Uso de IA
 

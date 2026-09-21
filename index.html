@@ -21,7 +21,7 @@
         <section class="panel-marcadores" aria-label="Estado de la partida">
             <div class="marcador">
                 <span class="etiqueta">Puntuación</span>
-                <strong>0</strong>
+                <strong id="puntuacion">0</strong>
             </div>
             <div class="marcador">
                 <span class="etiqueta">Tiempo</span>
@@ -37,18 +37,14 @@
             <section class="mesa" aria-labelledby="titulo-pedido">
                 <div class="titulo-seccion">
                     <p>Pedido actual</p>
-                    <span>#---</span>
+                    <span id="numero-pedido">#---</span>
                 </div>
 
                 <div class="pergamino">
-                    <div class="icono-pocion" aria-hidden="true">⚗️</div>
+                    <div id="icono-pocion" class="icono-pocion" aria-hidden="true">⚗️</div>
                     <h2 id="titulo-pedido">La botica está cerrada</h2>
-                    <p>En las próximas fases aparecerá aquí la receta solicitada.</p>
-                    <ul class="receta" aria-label="Ingredientes solicitados">
-                        <li>Ingrediente 1</li>
-                        <li>Ingrediente 2</li>
-                        <li>Ingrediente 3</li>
-                    </ul>
+                    <p id="descripcion-pedido">Abre la botica para recibir el primer pedido.</p>
+                    <ul id="receta" class="receta" aria-label="Ingredientes solicitados"></ul>
                 </div>
 
                 <h2 class="subtitulo">Estantería de ingredientes</h2>
@@ -66,19 +62,21 @@
                 <ul id="contenido-caldero" class="contenido-caldero" aria-live="polite"></ul>
 
                 <div class="acciones">
-                    <button class="boton boton-principal" type="button" disabled>Servir poción</button>
+                    <button id="servir" class="boton boton-principal" type="button" disabled>
+                        Servir poción
+                    </button>
                     <button id="vaciar" class="boton boton-secundario" type="button" disabled>
                         Vaciar caldero
                     </button>
                 </div>
 
-                <p id="mensaje" class="mensaje" aria-live="polite">Selecciona ingredientes para probar el caldero.</p>
-                <button class="boton boton-iniciar" type="button" disabled>Abrir botica</button>
+                <p id="mensaje" class="mensaje" aria-live="assertive">Pulsa «Abrir botica» para comenzar.</p>
+                <button id="iniciar" class="boton boton-iniciar" type="button">Abrir botica</button>
             </aside>
         </div>
 
         <footer>
-            <p>Fase 2 · Selección de ingredientes y contenido del caldero.</p>
+            <p>Fase 3 · Pedidos aleatorios y comprobación de recetas.</p>
         </footer>
     </main>
 </body>

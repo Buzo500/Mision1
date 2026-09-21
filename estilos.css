@@ -210,10 +210,15 @@ h1 span {
     transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
 }
 
-.ingrediente:hover,
+.ingrediente:hover:not(:disabled),
 .ingrediente:focus-visible {
     border-color: var(--dorado);
     transform: translateY(-3px);
+}
+
+.ingrediente:disabled {
+    cursor: not-allowed;
+    opacity: 0.48;
 }
 
 .ingrediente.seleccionado {
@@ -325,6 +330,16 @@ h1 span {
     border-left: 3px solid var(--morado);
     background-color: rgba(155, 106, 214, 0.09);
     font-size: 0.82rem;
+}
+
+.mensaje.exito {
+    border-left-color: #78d6a0;
+    background-color: rgba(120, 214, 160, 0.1);
+}
+
+.mensaje.error {
+    border-left-color: #f07d78;
+    background-color: rgba(240, 125, 120, 0.1);
 }
 
 footer {
