@@ -78,10 +78,41 @@ let vidas = VIDAS_INICIALES;
 let tiempoRestante = DURACION_PARTIDA;
 let cantidadPedidos = 0;
 let boticaAbierta = false;
-let temporizador = null;
+const temporizador = crearTemporizador(avanzarTiempo);
 
 function buscarIngrediente(id) {
     return ingredientesDisponibles.find((ingrediente) => ingrediente.id === id);
+}
+
+function crearTemporizador(alAvanzar, intervalo = 1000) {
+    let identificador = null;
+
+    function detener() {
+        if (identificador !== null) {
+            clearInterval(identificador);
+            identificador = null;
+        }
+    }
+
+    function iniciar() {
+        detener();
+        identificador = setInterval(alAvanzar, intervalo);
+    }
+
+    return { iniciar, detener };
+}
+
+function crearContenidoIngrediente(ingrediente) {
+    const contenido = document.createDocumentFragment();
+    const icono = document.createElement("span");
+    const nombre = document.createElement("strong");
+
+    icono.textContent = ingrediente.icono;
+    icono.setAttribute("aria-hidden", "true");
+    nombre.textContent = ingrediente.nombre;
+
+    contenido.append(icono, nombre);
+    return contenido;
 }
 
 function crearBotonesIngredientes() {
@@ -90,19 +121,13 @@ function crearBotonesIngredientes() {
 
     ingredientesDisponibles.forEach((ingrediente) => {
         const boton = document.createElement("button");
-        const icono = document.createElement("span");
-        const nombre = document.createElement("strong");
 
         boton.type = "button";
         boton.className = "ingrediente";
         boton.dataset.id = ingrediente.id;
         boton.setAttribute("aria-pressed", "false");
 
-        icono.textContent = ingrediente.icono;
-        icono.setAttribute("aria-hidden", "true");
-        nombre.textContent = ingrediente.nombre;
-
-        boton.append(icono, nombre);
+        boton.appendChild(crearContenidoIngrediente(ingrediente));
         ingredientesElemento.appendChild(boton);
         botonesIngredientes.set(ingrediente.id, boton);
     });
@@ -120,7 +145,7 @@ function actualizarCaldero() {
         ingredientesSeleccionados.forEach((id) => {
             const ingrediente = buscarIngrediente(id);
             const elemento = document.createElement("li");
-            elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
+            elemento.appendChild(crearContenidoIngrediente(ingrediente));
             contenidoCaldero.appendChild(elemento);
         });
     }
@@ -188,7 +213,7 @@ function elegirPedido() {
     pedidoActual.ingredientes.forEach((id) => {
         const ingrediente = buscarIngrediente(id);
         const elemento = document.createElement("li");
-        elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
+        elemento.appendChild(crearContenidoIngrediente(ingrediente));
         recetaElemento.appendChild(elemento);
     });
 
@@ -277,8 +302,7 @@ function servirPocion() {
 
 function terminarPartida(motivo) {
     boticaAbierta = false;
-    clearInterval(temporizador);
-    temporizador = null;
+    temporizador.detener();
     actualizarCaldero();
     calderoPanel.classList.remove("partida-activa");
     mostrarMensaje(`${motivo} Puntuación final: ${puntuacion}.`, "error");
@@ -296,7 +320,7 @@ function avanzarTiempo() {
 }
 
 function iniciarBotica() {
-    clearInterval(temporizador);
+    temporizador.detener();
     boticaAbierta = true;
     puntuacion = 0;
     vidas = VIDAS_INICIALES;
@@ -315,7 +339,7 @@ function iniciarBotica() {
     actualizarMarcadores();
     mostrarMensaje("La botica está abierta. Prepara el primer pedido.");
     elegirPedido();
-    temporizador = setInterval(avanzarTiempo, 1000);
+    temporizador.iniciar();
 }
 
 ingredientesElemento.addEventListener("click", (evento) => {
@@ -326,7 +350,7 @@ ingredientesElemento.addEventListener("click", (evento) => {
     }
 });
 
-botonVaciar.addEventListener("click", vaciarCaldero);
+botonVaciar.addEventListener("click", () => vaciarCaldero());
 botonServir.addEventListener("click", servirPocion);
 botonIniciar.addEventListener("click", iniciarBotica);
 
