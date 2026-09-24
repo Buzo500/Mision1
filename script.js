@@ -69,6 +69,7 @@ const botonIniciar = document.querySelector("#iniciar");
 const mensaje = document.querySelector("#mensaje");
 const historialElemento = document.querySelector("#historial");
 const calderoPanel = document.querySelector(".caldero-panel");
+const botonesIngredientes = new Map();
 
 let ingredientesSeleccionados = [];
 let pedidoActual = null;
@@ -91,6 +92,7 @@ function comprobarNumero(evento) {
 
 function crearBotonesIngredientes() {
     ingredientesElemento.textContent = "";
+    botonesIngredientes.clear();
 
     ingredientesDisponibles.forEach((ingrediente) => {
         const boton = document.createElement("button");
@@ -100,7 +102,6 @@ function crearBotonesIngredientes() {
         boton.type = "button";
         boton.className = "ingrediente";
         boton.dataset.id = ingrediente.id;
-        boton.disabled = true;
         boton.setAttribute("aria-pressed", "false");
 
         icono.textContent = ingrediente.icono;
@@ -109,6 +110,7 @@ function crearBotonesIngredientes() {
 
         boton.append(icono, nombre);
         ingredientesElemento.appendChild(boton);
+        botonesIngredientes.set(ingrediente.id, boton);
     });
 }
 
@@ -131,14 +133,22 @@ function actualizarCaldero() {
 
     const cantidad = ingredientesSeleccionados.length;
     contadorIngredientes.textContent = cantidad === 1 ? "1 ingrediente" : `${cantidad} ingredientes`;
-    botonVaciar.disabled = !boticaAbierta || cantidad === 0;
-    botonServir.disabled = !boticaAbierta || cantidad === 0;
+    actualizarEstadoControles();
+}
 
-    document.querySelectorAll(".ingrediente").forEach((boton) => {
-        const estaSeleccionado = ingredientesSeleccionados.includes(boton.dataset.id);
+function actualizarEstadoControles() {
+    const cantidad = ingredientesSeleccionados.length;
+    const puedeUsarCaldero = boticaAbierta && cantidad > 0;
+
+    botonesIngredientes.forEach((boton, id) => {
+        const estaSeleccionado = ingredientesSeleccionados.includes(id);
+        boton.disabled = !boticaAbierta;
         boton.classList.toggle("seleccionado", estaSeleccionado);
         boton.setAttribute("aria-pressed", String(estaSeleccionado));
     });
+
+    botonVaciar.disabled = !puedeUsarCaldero;
+    botonServir.disabled = !puedeUsarCaldero;
 }
 
 function mostrarMensaje(texto, tipo = "") {
@@ -166,6 +176,7 @@ function actualizarMarcadores() {
 function elegirPedido() {
     let siguientePedido = pociones[Math.floor(Math.random() * pociones.length)];
 
+    // Con una sola poción no hay otra opción posible para el siguiente sorteo.
     if (pociones.length > 1) {
         while (siguientePedido === pedidoActual) {
             siguientePedido = pociones[Math.floor(Math.random() * pociones.length)];
@@ -270,22 +281,11 @@ function servirPocion() {
     }
 }
 
-function activarControles(activar) {
-    document.querySelectorAll(".ingrediente").forEach((boton) => {
-        boton.disabled = !activar;
-    });
-
-    if (!activar) {
-        botonServir.disabled = true;
-        botonVaciar.disabled = true;
-    }
-}
-
 function terminarPartida(motivo) {
     boticaAbierta = false;
     clearInterval(temporizador);
     temporizador = null;
-    activarControles(false);
+    actualizarCaldero();
     calderoPanel.classList.remove("partida-activa");
     mostrarMensaje(`${motivo} Puntuación final: ${puntuacion}.`, "error");
     botonIniciar.textContent = "Abrir de nuevo";
@@ -317,7 +317,6 @@ function iniciarBotica() {
     mensajeVacio.textContent = "Todavía no has entregado ninguna poción.";
     historialElemento.appendChild(mensajeVacio);
 
-    activarControles(true);
     calderoPanel.classList.add("partida-activa");
     actualizarMarcadores();
     mostrarMensaje("La botica está abierta. Prepara el primer pedido.");
