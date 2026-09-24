@@ -80,15 +80,9 @@ let cantidadPedidos = 0;
 let boticaAbierta = false;
 const temporizador = crearTemporizador(avanzarTiempo);
 
-<<<<<<< Updated upstream
 function buscarIngrediente(id) {
     return ingredientesDisponibles.find((ingrediente) => ingrediente.id === id);
 }
-=======
-// funcion que comprueba el numero introducido
-function comprobarNumero(evento) {
-    evento.preventDefault();
->>>>>>> Stashed changes
 
 function crearTemporizador(alAvanzar, intervalo = 1000) {
     let identificador = null;
