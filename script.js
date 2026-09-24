@@ -79,9 +79,15 @@ let cantidadPedidos = 0;
 let boticaAbierta = false;
 let temporizador = null;
 
+<<<<<<< Updated upstream
 function buscarIngrediente(id) {
     return ingredientesDisponibles.find((ingrediente) => ingrediente.id === id);
 }
+=======
+// funcion que comprueba el numero introducido
+function comprobarNumero(evento) {
+    evento.preventDefault();
+>>>>>>> Stashed changes
 
 function crearBotonesIngredientes() {
     ingredientesElemento.textContent = "";
