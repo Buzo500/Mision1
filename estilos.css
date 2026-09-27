@@ -1,12 +1,12 @@
 :root {
-    --fondo: #160f20;
-    --panel: #2b1b37;
+    --fondo: #e8d9b8;
+    --panel: #fff9e7;
     --pergamino: #f3dfb2;
-    --texto: #f8efd9;
-    --texto-oscuro: #35263d;
-    --morado: #9b6ad6;
-    --dorado: #f2bd57;
-    --borde: rgba(242, 189, 87, 0.3);
+    --texto: #33263c;
+    --texto-oscuro: #33263c;
+    --morado: #6c3991;
+    --dorado: #c88418;
+    --borde: rgba(81, 49, 100, 0.25);
 }
 
 * {
@@ -25,14 +25,14 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.luz-arcana {
-    --fondo: #e8d9b8;
-    --panel: #fff9e7;
-    --texto: #33263c;
-    --texto-oscuro: #33263c;
-    --morado: #6c3991;
-    --dorado: #c88418;
-    --borde: rgba(81, 49, 100, 0.25);
+body.modo-oscuro {
+    --fondo: #160f20;
+    --panel: #2b1b37;
+    --texto: #f8efd9;
+    --texto-oscuro: #35263d;
+    --morado: #9b6ad6;
+    --dorado: #f2bd57;
+    --borde: rgba(242, 189, 87, 0.3);
 }
 
 .decoracion {
