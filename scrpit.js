@@ -70,18 +70,13 @@ const mensaje = document.querySelector("#mensaje");
 const historialElemento = document.querySelector("#historial");
 const calderoPanel = document.querySelector(".caldero-panel");
 
-const botonesIngredientes = new Map();
-
-const estadoPartida = {
-    ingredientesSeleccionados: [],
-    pedidoActual: null,
-    puntuacion: 0,
-    vidas: VIDAS_INICIALES,
-    tiempoRestante: DURACION_PARTIDA,
-    cantidadPedidos: 0,
-    boticaAbierta: false
-};
-
+let ingredientesSeleccionados = [];
+let pedidoActual = null;
+let puntuacion = 0;
+let vidas = VIDAS_INICIALES;
+let tiempoRestante = DURACION_PARTIDA;
+let cantidadPedidos = 0;
+let boticaAbierta = false;
 let temporizador = null;
 
 function buscarIngrediente(id) {
@@ -90,7 +85,6 @@ function buscarIngrediente(id) {
 
 function crearBotonesIngredientes() {
     ingredientesElemento.textContent = "";
-    botonesIngredientes.clear();
 
     ingredientesDisponibles.forEach((ingrediente) => {
         const boton = document.createElement("button");
@@ -109,32 +103,19 @@ function crearBotonesIngredientes() {
 
         boton.append(icono, nombre);
         ingredientesElemento.appendChild(boton);
-
-        botonesIngredientes.set(ingrediente.id, boton);
     });
-}
-
-function actualizarEstadoControles() {
-    const hayIngredientes = estadoPartida.ingredientesSeleccionados.length > 0;
-
-    botonesIngredientes.forEach((boton) => {
-        boton.disabled = !estadoPartida.boticaAbierta;
-    });
-
-    botonServir.disabled = !estadoPartida.boticaAbierta || !hayIngredientes;
-    botonVaciar.disabled = !estadoPartida.boticaAbierta || !hayIngredientes;
 }
 
 function actualizarCaldero() {
     contenidoCaldero.textContent = "";
 
-    if (estadoPartida.ingredientesSeleccionados.length === 0) {
+    if (ingredientesSeleccionados.length === 0) {
         const elementoVacio = document.createElement("li");
         elementoVacio.className = "vacio";
         elementoVacio.textContent = "El caldero está vacío";
         contenidoCaldero.appendChild(elementoVacio);
     } else {
-        estadoPartida.ingredientesSeleccionados.forEach((id) => {
+        ingredientesSeleccionados.forEach((id) => {
             const ingrediente = buscarIngrediente(id);
             const elemento = document.createElement("li");
             elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
@@ -142,17 +123,16 @@ function actualizarCaldero() {
         });
     }
 
-    const cantidad = estadoPartida.ingredientesSeleccionados.length;
-    contadorIngredientes.textContent =
-        cantidad === 1 ? "1 ingrediente" : `${cantidad} ingredientes`;
+    const cantidad = ingredientesSeleccionados.length;
+    contadorIngredientes.textContent = cantidad === 1 ? "1 ingrediente" : `${cantidad} ingredientes`;
+    botonVaciar.disabled = !boticaAbierta || cantidad === 0;
+    botonServir.disabled = !boticaAbierta || cantidad === 0;
 
-    botonesIngredientes.forEach((boton, id) => {
-        const estaSeleccionado = estadoPartida.ingredientesSeleccionados.includes(id);
+    document.querySelectorAll(".ingrediente").forEach((boton) => {
+        const estaSeleccionado = ingredientesSeleccionados.includes(boton.dataset.id);
         boton.classList.toggle("seleccionado", estaSeleccionado);
         boton.setAttribute("aria-pressed", String(estaSeleccionado));
     });
-
-    actualizarEstadoControles();
 }
 
 function mostrarMensaje(texto, tipo = "") {
@@ -165,52 +145,36 @@ function mostrarMensaje(texto, tipo = "") {
 }
 
 function actualizarMarcadores() {
-    puntuacionElemento.textContent = estadoPartida.puntuacion;
-    tiempoElemento.textContent = estadoPartida.tiempoRestante;
-    vidasElemento.textContent = Array.from(
-        { length: VIDAS_INICIALES },
-        (_, indice) => {
-            return indice < estadoPartida.vidas ? "♥" : "♡";
-        }
-    ).join(" ");
+    puntuacionElemento.textContent = puntuacion;
+    tiempoElemento.textContent = tiempoRestante;
+    vidasElemento.textContent = Array.from({ length: VIDAS_INICIALES }, (_, indice) => {
+        return indice < vidas ? "♥" : "♡";
+    }).join(" ");
+    vidasElemento.setAttribute("aria-label", `${vidas} licencias disponibles`);
 
-    vidasElemento.setAttribute(
-        "aria-label",
-        `${estadoPartida.vidas} licencias disponibles`
-    );
-
-    const porcentaje =
-        (estadoPartida.tiempoRestante / DURACION_PARTIDA) * 100;
+    const porcentaje = (tiempoRestante / DURACION_PARTIDA) * 100;
     progresoTiempo.style.width = `${porcentaje}%`;
-    progresoTiempo.classList.toggle(
-        "tiempo-agotandose",
-        estadoPartida.tiempoRestante <= 10
-    );
+    progresoTiempo.style.backgroundColor = tiempoRestante <= 10 ? "#f07d78" : "var(--dorado)";
 }
 
 function elegirPedido() {
-    let siguientePedido =
-        pociones[Math.floor(Math.random() * pociones.length)];
+    let siguientePedido = pociones[Math.floor(Math.random() * pociones.length)];
 
-    // Solo buscamos una poción distinta si hay más de una disponible.
-    // Así evitamos un bucle infinito cuando el array contiene una sola poción.
     if (pociones.length > 1) {
-        while (siguientePedido === estadoPartida.pedidoActual) {
-            siguientePedido =
-                pociones[Math.floor(Math.random() * pociones.length)];
+        while (siguientePedido === pedidoActual) {
+            siguientePedido = pociones[Math.floor(Math.random() * pociones.length)];
         }
     }
 
-    estadoPartida.pedidoActual = siguientePedido;
-    estadoPartida.cantidadPedidos += 1;
-    numeroPedido.textContent =
-        `#${String(estadoPartida.cantidadPedidos).padStart(3, "0")}`;
-    iconoPocion.textContent = estadoPartida.pedidoActual.icono;
-    tituloPedido.textContent = estadoPartida.pedidoActual.nombre;
-    descripcionPedido.textContent = estadoPartida.pedidoActual.descripcion;
+    pedidoActual = siguientePedido;
+    cantidadPedidos += 1;
+    numeroPedido.textContent = `#${String(cantidadPedidos).padStart(3, "0")}`;
+    iconoPocion.textContent = pedidoActual.icono;
+    tituloPedido.textContent = pedidoActual.nombre;
+    descripcionPedido.textContent = pedidoActual.descripcion;
     recetaElemento.textContent = "";
 
-    estadoPartida.pedidoActual.ingredientes.forEach((id) => {
+    pedidoActual.ingredientes.forEach((id) => {
         const ingrediente = buscarIngrediente(id);
         const elemento = document.createElement("li");
         elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
@@ -221,71 +185,43 @@ function elegirPedido() {
 }
 
 function alternarIngrediente(id) {
-    if (!estadoPartida.boticaAbierta) {
+    if (!boticaAbierta) {
         return;
     }
 
     const ingrediente = buscarIngrediente(id);
 
-    if (estadoPartida.ingredientesSeleccionados.includes(id)) {
-        estadoPartida.ingredientesSeleccionados =
-            estadoPartida.ingredientesSeleccionados.filter(
-                (ingredienteId) => ingredienteId !== id
-            );
-
-        mostrarMensaje(
-            `Has retirado ${ingrediente.nombre} del caldero.`
-        );
+    if (ingredientesSeleccionados.includes(id)) {
+        ingredientesSeleccionados = ingredientesSeleccionados.filter((ingredienteId) => ingredienteId !== id);
+        mostrarMensaje(`Has retirado ${ingrediente.nombre} del caldero.`);
     } else {
-        estadoPartida.ingredientesSeleccionados.push(id);
-
-        mostrarMensaje(
-            `Has añadido ${ingrediente.nombre} al caldero.`
-        );
+        ingredientesSeleccionados.push(id);
+        mostrarMensaje(`Has añadido ${ingrediente.nombre} al caldero.`);
     }
 
     actualizarCaldero();
 }
 
 function vaciarCaldero(mostrarAviso = true) {
-    estadoPartida.ingredientesSeleccionados = [];
+    ingredientesSeleccionados = [];
 
     if (mostrarAviso) {
-        mostrarMensaje(
-            "Has vaciado todos los ingredientes del caldero."
-        );
+        mostrarMensaje("Has vaciado todos los ingredientes del caldero.");
     }
 
     actualizarCaldero();
 }
 
 function contieneIngredientesCorrectos() {
-    if (!estadoPartida.pedidoActual) {
+    if (ingredientesSeleccionados.length !== pedidoActual.ingredientes.length) {
         return false;
     }
 
-    if (
-        estadoPartida.ingredientesSeleccionados.length !==
-        estadoPartida.pedidoActual.ingredientes.length
-    ) {
-        return false;
-    }
-
-    return estadoPartida.pedidoActual.ingredientes.every((id) =>
-        estadoPartida.ingredientesSeleccionados.includes(id)
-    );
-}
-
-function calcularResultadoEntrega(estado, esCorrecta) {
-    return {
-        puntuacion: estado.puntuacion + (esCorrecta ? 10 : 0),
-        vidas: estado.vidas - (esCorrecta ? 0 : 1)
-    };
+    return pedidoActual.ingredientes.every((id) => ingredientesSeleccionados.includes(id));
 }
 
 function registrarEntrega(esCorrecta) {
-    const mensajeVacio =
-        historialElemento.querySelector(".historial-vacio");
+    const mensajeVacio = historialElemento.querySelector(".historial-vacio");
 
     if (mensajeVacio) {
         mensajeVacio.remove();
@@ -293,11 +229,9 @@ function registrarEntrega(esCorrecta) {
 
     const entrada = document.createElement("li");
     entrada.className = esCorrecta ? "correcto" : "incorrecto";
-
     entrada.textContent = esCorrecta
-        ? `✓ ${estadoPartida.pedidoActual.nombre} entregada correctamente`
-        : `✕ ${estadoPartida.pedidoActual.nombre} salió mal`;
-
+        ? `✓ ${pedidoActual.nombre} entregada correctamente`
+        : `✕ ${pedidoActual.nombre} salió mal`;
     historialElemento.prepend(entrada);
 
     while (historialElemento.children.length > 6) {
@@ -306,108 +240,94 @@ function registrarEntrega(esCorrecta) {
 }
 
 function servirPocion() {
-    if (
-        !estadoPartida.boticaAbierta ||
-        !estadoPartida.pedidoActual ||
-        estadoPartida.ingredientesSeleccionados.length === 0
-    ) {
+    if (!boticaAbierta || ingredientesSeleccionados.length === 0) {
         return;
     }
 
     const esCorrecta = contieneIngredientesCorrectos();
-    const nuevoEstado = calcularResultadoEntrega(estadoPartida, esCorrecta);
     registrarEntrega(esCorrecta);
 
-    estadoPartida.puntuacion = nuevoEstado.puntuacion;
-    estadoPartida.vidas = nuevoEstado.vidas;
-    mostrarMensaje(
-        esCorrecta
-            ? "¡Mezcla perfecta! Has ganado 10 puntos."
-            : "La mezcla no coincide con la receta. Pierdes una licencia.",
-        esCorrecta ? "exito" : "error"
-    );
+    if (esCorrecta) {
+        puntuacion += 10;
+        mostrarMensaje("¡Mezcla perfecta! Has ganado 10 puntos.", "exito");
+    } else {
+        vidas -= 1;
+        mostrarMensaje("La mezcla no coincide con la receta. Pierdes una licencia.", "error");
+    }
 
     actualizarMarcadores();
 
-    if (estadoPartida.vidas === 0) {
-        terminarPartida(
-            "Te has quedado sin licencias de alquimista."
-        );
+    if (vidas === 0) {
+        terminarPartida("Te has quedado sin licencias de alquimista.");
     } else {
         elegirPedido();
     }
 }
 
+function activarControles(activar) {
+    document.querySelectorAll(".ingrediente").forEach((boton) => {
+        boton.disabled = !activar;
+    });
+
+    if (!activar) {
+        botonServir.disabled = true;
+        botonVaciar.disabled = true;
+    }
+}
+
 function terminarPartida(motivo) {
-    estadoPartida.boticaAbierta = false;
+    boticaAbierta = false;
     clearInterval(temporizador);
     temporizador = null;
-
-    actualizarEstadoControles();
-
+    activarControles(false);
     calderoPanel.classList.remove("partida-activa");
-
-    mostrarMensaje(
-        `${motivo} Puntuación final: ${estadoPartida.puntuacion}.`,
-        "error"
-    );
-
+    mostrarMensaje(`${motivo} Puntuación final: ${puntuacion}.`, "error");
     botonIniciar.textContent = "Abrir de nuevo";
     botonIniciar.focus();
 }
 
 function avanzarTiempo() {
-    estadoPartida.tiempoRestante -= 1;
+    tiempoRestante -= 1;
     actualizarMarcadores();
 
-    if (estadoPartida.tiempoRestante === 0) {
+    if (tiempoRestante === 0) {
         terminarPartida("La botica ha cerrado.");
     }
 }
 
 function iniciarBotica() {
     clearInterval(temporizador);
-
-    estadoPartida.boticaAbierta = true;
-    estadoPartida.puntuacion = 0;
-    estadoPartida.vidas = VIDAS_INICIALES;
-    estadoPartida.tiempoRestante = DURACION_PARTIDA;
-    estadoPartida.cantidadPedidos = 0;
-    estadoPartida.pedidoActual = null;
-
+    boticaAbierta = true;
+    puntuacion = 0;
+    vidas = VIDAS_INICIALES;
+    tiempoRestante = DURACION_PARTIDA;
+    cantidadPedidos = 0;
+    pedidoActual = null;
     botonIniciar.textContent = "Reiniciar partida";
 
     historialElemento.textContent = "";
-
     const mensajeVacio = document.createElement("li");
     mensajeVacio.className = "historial-vacio";
-    mensajeVacio.textContent =
-        "Todavía no has entregado ninguna poción.";
-
+    mensajeVacio.textContent = "Todavía no has entregado ninguna poción.";
     historialElemento.appendChild(mensajeVacio);
 
+    activarControles(true);
     calderoPanel.classList.add("partida-activa");
     actualizarMarcadores();
-
-    mostrarMensaje(
-        "La botica está abierta. Prepara el primer pedido."
-    );
-
+    mostrarMensaje("La botica está abierta. Prepara el primer pedido.");
     elegirPedido();
-
     temporizador = setInterval(avanzarTiempo, 1000);
 }
 
 ingredientesElemento.addEventListener("click", (evento) => {
-    const botonIngrediente =
-        evento.target.closest(".ingrediente");
+    const botonIngrediente = evento.target.closest(".ingrediente");
 
     if (botonIngrediente) {
         alternarIngrediente(botonIngrediente.dataset.id);
     }
 });
 
-botonVaciar.addEventListener("click", () => vaciarCaldero());
+botonVaciar.addEventListener("click", vaciarCaldero);
 botonServir.addEventListener("click", servirPocion);
 botonIniciar.addEventListener("click", iniciarBotica);
 
