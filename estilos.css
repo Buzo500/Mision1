@@ -7,6 +7,10 @@
     --morado: #9b6ad6;
     --dorado: #f2bd57;
     --borde: rgba(242, 189, 87, 0.3);
+    --color-exito: #78d6a0;
+    --fondo-exito: rgba(120, 214, 160, 0.16);
+    --color-error: #f07d78;
+    --fondo-error: rgba(240, 125, 120, 0.1);
 }
 
 * {
@@ -33,6 +37,10 @@ body.luz-arcana {
     --morado: #6c3991;
     --dorado: #c88418;
     --borde: rgba(81, 49, 100, 0.25);
+    --color-exito: #34764f;
+    --fondo-exito: rgba(52, 118, 79, 0.12);
+    --color-error: #b7423e;
+    --fondo-error: rgba(183, 66, 62, 0.1);
 }
 
 .decoracion {
@@ -142,6 +150,10 @@ h1 span {
     border-radius: inherit;
     background-color: var(--dorado);
     transition: width 1s linear, background-color 0.2s ease;
+}
+
+#progreso-tiempo.tiempo-agotandose {
+    background-color: var(--color-error);
 }
 
 .etiqueta {
@@ -268,9 +280,9 @@ h1 span {
 }
 
 .ingrediente.seleccionado {
-    border-color: #78d6a0;
-    background-color: rgba(120, 214, 160, 0.16);
-    box-shadow: inset 0 0 0 1px #78d6a0;
+    border-color: var(--color-exito);
+    background-color: var(--fondo-exito);
+    box-shadow: inset 0 0 0 1px var(--color-exito);
 }
 
 .ingrediente span,
@@ -438,13 +450,13 @@ h1 span {
 }
 
 .mensaje.exito {
-    border-left-color: #78d6a0;
-    background-color: rgba(120, 214, 160, 0.1);
+    border-left-color: var(--color-exito);
+    background-color: var(--fondo-exito);
 }
 
 .mensaje.error {
-    border-left-color: #f07d78;
-    background-color: rgba(240, 125, 120, 0.1);
+    border-left-color: var(--color-error);
+    background-color: var(--fondo-error);
 }
 
 footer {
@@ -491,11 +503,11 @@ footer p {
 }
 
 .historial li.correcto {
-    border-left: 3px solid #78d6a0;
+    border-left: 3px solid var(--color-exito);
 }
 
 .historial li.incorrecto {
-    border-left: 3px solid #f07d78;
+    border-left: 3px solid var(--color-error);
 }
 
 .historial .historial-vacio {

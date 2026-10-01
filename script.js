@@ -72,13 +72,16 @@ const calderoPanel = document.querySelector(".caldero-panel");
 
 const botonesIngredientes = new Map();
 
-let ingredientesSeleccionados = [];
-let pedidoActual = null;
-let puntuacion = 0;
-let vidas = VIDAS_INICIALES;
-let tiempoRestante = DURACION_PARTIDA;
-let cantidadPedidos = 0;
-let boticaAbierta = false;
+const estadoPartida = {
+    ingredientesSeleccionados: [],
+    pedidoActual: null,
+    puntuacion: 0,
+    vidas: VIDAS_INICIALES,
+    tiempoRestante: DURACION_PARTIDA,
+    cantidadPedidos: 0,
+    boticaAbierta: false
+};
+
 let temporizador = null;
 
 function buscarIngrediente(id) {
@@ -112,26 +115,26 @@ function crearBotonesIngredientes() {
 }
 
 function actualizarEstadoControles() {
-    const hayIngredientes = ingredientesSeleccionados.length > 0;
+    const hayIngredientes = estadoPartida.ingredientesSeleccionados.length > 0;
 
     botonesIngredientes.forEach((boton) => {
-        boton.disabled = !boticaAbierta;
+        boton.disabled = !estadoPartida.boticaAbierta;
     });
 
-    botonServir.disabled = !boticaAbierta || !hayIngredientes;
-    botonVaciar.disabled = !boticaAbierta || !hayIngredientes;
+    botonServir.disabled = !estadoPartida.boticaAbierta || !hayIngredientes;
+    botonVaciar.disabled = !estadoPartida.boticaAbierta || !hayIngredientes;
 }
 
 function actualizarCaldero() {
     contenidoCaldero.textContent = "";
 
-    if (ingredientesSeleccionados.length === 0) {
+    if (estadoPartida.ingredientesSeleccionados.length === 0) {
         const elementoVacio = document.createElement("li");
         elementoVacio.className = "vacio";
         elementoVacio.textContent = "El caldero está vacío";
         contenidoCaldero.appendChild(elementoVacio);
     } else {
-        ingredientesSeleccionados.forEach((id) => {
+        estadoPartida.ingredientesSeleccionados.forEach((id) => {
             const ingrediente = buscarIngrediente(id);
             const elemento = document.createElement("li");
             elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
@@ -139,12 +142,12 @@ function actualizarCaldero() {
         });
     }
 
-    const cantidad = ingredientesSeleccionados.length;
+    const cantidad = estadoPartida.ingredientesSeleccionados.length;
     contadorIngredientes.textContent =
         cantidad === 1 ? "1 ingrediente" : `${cantidad} ingredientes`;
 
     botonesIngredientes.forEach((boton, id) => {
-        const estaSeleccionado = ingredientesSeleccionados.includes(id);
+        const estaSeleccionado = estadoPartida.ingredientesSeleccionados.includes(id);
         boton.classList.toggle("seleccionado", estaSeleccionado);
         boton.setAttribute("aria-pressed", String(estaSeleccionado));
     });
@@ -162,24 +165,27 @@ function mostrarMensaje(texto, tipo = "") {
 }
 
 function actualizarMarcadores() {
-    puntuacionElemento.textContent = puntuacion;
-    tiempoElemento.textContent = tiempoRestante;
+    puntuacionElemento.textContent = estadoPartida.puntuacion;
+    tiempoElemento.textContent = estadoPartida.tiempoRestante;
     vidasElemento.textContent = Array.from(
         { length: VIDAS_INICIALES },
         (_, indice) => {
-            return indice < vidas ? "♥" : "♡";
+            return indice < estadoPartida.vidas ? "♥" : "♡";
         }
     ).join(" ");
 
     vidasElemento.setAttribute(
         "aria-label",
-        `${vidas} licencias disponibles`
+        `${estadoPartida.vidas} licencias disponibles`
     );
 
-    const porcentaje = (tiempoRestante / DURACION_PARTIDA) * 100;
+    const porcentaje =
+        (estadoPartida.tiempoRestante / DURACION_PARTIDA) * 100;
     progresoTiempo.style.width = `${porcentaje}%`;
-    progresoTiempo.style.backgroundColor =
-        tiempoRestante <= 10 ? "#f07d78" : "var(--dorado)";
+    progresoTiempo.classList.toggle(
+        "tiempo-agotandose",
+        estadoPartida.tiempoRestante <= 10
+    );
 }
 
 function elegirPedido() {
@@ -189,22 +195,22 @@ function elegirPedido() {
     // Solo buscamos una poción distinta si hay más de una disponible.
     // Así evitamos un bucle infinito cuando el array contiene una sola poción.
     if (pociones.length > 1) {
-        while (siguientePedido === pedidoActual) {
+        while (siguientePedido === estadoPartida.pedidoActual) {
             siguientePedido =
                 pociones[Math.floor(Math.random() * pociones.length)];
         }
     }
 
-    pedidoActual = siguientePedido;
-    cantidadPedidos += 1;
+    estadoPartida.pedidoActual = siguientePedido;
+    estadoPartida.cantidadPedidos += 1;
     numeroPedido.textContent =
-        `#${String(cantidadPedidos).padStart(3, "0")}`;
-    iconoPocion.textContent = pedidoActual.icono;
-    tituloPedido.textContent = pedidoActual.nombre;
-    descripcionPedido.textContent = pedidoActual.descripcion;
+        `#${String(estadoPartida.cantidadPedidos).padStart(3, "0")}`;
+    iconoPocion.textContent = estadoPartida.pedidoActual.icono;
+    tituloPedido.textContent = estadoPartida.pedidoActual.nombre;
+    descripcionPedido.textContent = estadoPartida.pedidoActual.descripcion;
     recetaElemento.textContent = "";
 
-    pedidoActual.ingredientes.forEach((id) => {
+    estadoPartida.pedidoActual.ingredientes.forEach((id) => {
         const ingrediente = buscarIngrediente(id);
         const elemento = document.createElement("li");
         elemento.textContent = `${ingrediente.icono} ${ingrediente.nombre}`;
@@ -215,22 +221,23 @@ function elegirPedido() {
 }
 
 function alternarIngrediente(id) {
-    if (!boticaAbierta) {
+    if (!estadoPartida.boticaAbierta) {
         return;
     }
 
     const ingrediente = buscarIngrediente(id);
 
-    if (ingredientesSeleccionados.includes(id)) {
-        ingredientesSeleccionados = ingredientesSeleccionados.filter(
-            (ingredienteId) => ingredienteId !== id
-        );
+    if (estadoPartida.ingredientesSeleccionados.includes(id)) {
+        estadoPartida.ingredientesSeleccionados =
+            estadoPartida.ingredientesSeleccionados.filter(
+                (ingredienteId) => ingredienteId !== id
+            );
 
         mostrarMensaje(
             `Has retirado ${ingrediente.nombre} del caldero.`
         );
     } else {
-        ingredientesSeleccionados.push(id);
+        estadoPartida.ingredientesSeleccionados.push(id);
 
         mostrarMensaje(
             `Has añadido ${ingrediente.nombre} al caldero.`
@@ -241,7 +248,7 @@ function alternarIngrediente(id) {
 }
 
 function vaciarCaldero(mostrarAviso = true) {
-    ingredientesSeleccionados = [];
+    estadoPartida.ingredientesSeleccionados = [];
 
     if (mostrarAviso) {
         mostrarMensaje(
@@ -253,16 +260,27 @@ function vaciarCaldero(mostrarAviso = true) {
 }
 
 function contieneIngredientesCorrectos() {
+    if (!estadoPartida.pedidoActual) {
+        return false;
+    }
+
     if (
-        ingredientesSeleccionados.length !==
-        pedidoActual.ingredientes.length
+        estadoPartida.ingredientesSeleccionados.length !==
+        estadoPartida.pedidoActual.ingredientes.length
     ) {
         return false;
     }
 
-    return pedidoActual.ingredientes.every((id) =>
-        ingredientesSeleccionados.includes(id)
+    return estadoPartida.pedidoActual.ingredientes.every((id) =>
+        estadoPartida.ingredientesSeleccionados.includes(id)
     );
+}
+
+function calcularResultadoEntrega(estado, esCorrecta) {
+    return {
+        puntuacion: estado.puntuacion + (esCorrecta ? 10 : 0),
+        vidas: estado.vidas - (esCorrecta ? 0 : 1)
+    };
 }
 
 function registrarEntrega(esCorrecta) {
@@ -277,8 +295,8 @@ function registrarEntrega(esCorrecta) {
     entrada.className = esCorrecta ? "correcto" : "incorrecto";
 
     entrada.textContent = esCorrecta
-        ? `✓ ${pedidoActual.nombre} entregada correctamente`
-        : `✕ ${pedidoActual.nombre} salió mal`;
+        ? `✓ ${estadoPartida.pedidoActual.nombre} entregada correctamente`
+        : `✕ ${estadoPartida.pedidoActual.nombre} salió mal`;
 
     historialElemento.prepend(entrada);
 
@@ -288,30 +306,30 @@ function registrarEntrega(esCorrecta) {
 }
 
 function servirPocion() {
-    if (!boticaAbierta || ingredientesSeleccionados.length === 0) {
+    if (
+        !estadoPartida.boticaAbierta ||
+        !estadoPartida.pedidoActual ||
+        estadoPartida.ingredientesSeleccionados.length === 0
+    ) {
         return;
     }
 
     const esCorrecta = contieneIngredientesCorrectos();
+    const nuevoEstado = calcularResultadoEntrega(estadoPartida, esCorrecta);
     registrarEntrega(esCorrecta);
 
-    if (esCorrecta) {
-        puntuacion += 10;
-        mostrarMensaje(
-            "¡Mezcla perfecta! Has ganado 10 puntos.",
-            "exito"
-        );
-    } else {
-        vidas -= 1;
-        mostrarMensaje(
-            "La mezcla no coincide con la receta. Pierdes una licencia.",
-            "error"
-        );
-    }
+    estadoPartida.puntuacion = nuevoEstado.puntuacion;
+    estadoPartida.vidas = nuevoEstado.vidas;
+    mostrarMensaje(
+        esCorrecta
+            ? "¡Mezcla perfecta! Has ganado 10 puntos."
+            : "La mezcla no coincide con la receta. Pierdes una licencia.",
+        esCorrecta ? "exito" : "error"
+    );
 
     actualizarMarcadores();
 
-    if (vidas === 0) {
+    if (estadoPartida.vidas === 0) {
         terminarPartida(
             "Te has quedado sin licencias de alquimista."
         );
@@ -321,7 +339,7 @@ function servirPocion() {
 }
 
 function terminarPartida(motivo) {
-    boticaAbierta = false;
+    estadoPartida.boticaAbierta = false;
     clearInterval(temporizador);
     temporizador = null;
 
@@ -330,7 +348,7 @@ function terminarPartida(motivo) {
     calderoPanel.classList.remove("partida-activa");
 
     mostrarMensaje(
-        `${motivo} Puntuación final: ${puntuacion}.`,
+        `${motivo} Puntuación final: ${estadoPartida.puntuacion}.`,
         "error"
     );
 
@@ -339,10 +357,10 @@ function terminarPartida(motivo) {
 }
 
 function avanzarTiempo() {
-    tiempoRestante -= 1;
+    estadoPartida.tiempoRestante -= 1;
     actualizarMarcadores();
 
-    if (tiempoRestante === 0) {
+    if (estadoPartida.tiempoRestante === 0) {
         terminarPartida("La botica ha cerrado.");
     }
 }
@@ -350,12 +368,12 @@ function avanzarTiempo() {
 function iniciarBotica() {
     clearInterval(temporizador);
 
-    boticaAbierta = true;
-    puntuacion = 0;
-    vidas = VIDAS_INICIALES;
-    tiempoRestante = DURACION_PARTIDA;
-    cantidadPedidos = 0;
-    pedidoActual = null;
+    estadoPartida.boticaAbierta = true;
+    estadoPartida.puntuacion = 0;
+    estadoPartida.vidas = VIDAS_INICIALES;
+    estadoPartida.tiempoRestante = DURACION_PARTIDA;
+    estadoPartida.cantidadPedidos = 0;
+    estadoPartida.pedidoActual = null;
 
     botonIniciar.textContent = "Reiniciar partida";
 
@@ -389,7 +407,7 @@ ingredientesElemento.addEventListener("click", (evento) => {
     }
 });
 
-botonVaciar.addEventListener("click", vaciarCaldero);
+botonVaciar.addEventListener("click", () => vaciarCaldero());
 botonServir.addEventListener("click", servirPocion);
 botonIniciar.addEventListener("click", iniciarBotica);
 
